@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Calculadora de Porcentagem e Lista de Produtos</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f4f4;
+      padding: 20px;
+    }
+    .container {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 20px;
+      background-color: white;
+      border-radius: 10px;
+      box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+    }
+    h1 {
+      text-align: center;
+    }
+    .calc-container, .list-container {
+      margin-bottom: 20px;
+    }
+    input, button {
+      padding: 10px;
+      margin: 5px 0;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      width: calc(100% - 20px);
+    }
+    button {
+      background-color: #4CAF50;
+      color: white;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #45a049;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+    }
+    table, th, td {
+      border: 1px solid #ddd;
+    }
+    th, td {
+      padding: 10px;
+      text-align: left;
+    }
+    th {
+      background-color: #f2f2f2;
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <h1>Calculadora de Porcentagem e Lista de Produtos</h1>
+
+  <div class="calc-container">
+    <h2>Calculadora de Porcentagem</h2>
+    <label for="preco">Preço:</label>
+    <input type="number" id="preco" placeholder="Digite o preço" step="0.01">
+
+    <label for="porcentagem">Porcentagem (%):</label>
+    <input type="number" id="porcentagem" placeholder="Digite a porcentagem" step="0.01">
+
+    <button onclick="calcularPorcentagem()">Calcular Preço com Desconto</button>
+    <p id="resultadoPorcentagem"></p>
+  </div>
+
+  <div class="list-container">
+    <h2>Adicionar Produtos à Lista</h2>
+    <label for="nomeProduto">Nome do Produto:</label>
+    <input type="text" id="nomeProduto" placeholder="Nome do produto">
+
+    <label for="precoProduto">Preço do Produto:</label>
+    <input type="number" id="precoProduto" placeholder="Preço do produto" step="0.01">
+
+    <button onclick="adicionarProduto()">Adicionar Produto</button>
+
+    <table id="tabelaProdutos">
+      <thead>
+        <tr>
+          <th>Nome do Produto</th>
+          <th>Preço</th>
+        </tr>
+      </thead>
+      <tbody>
+        <!-- Produtos serão adicionados aqui -->
+      </tbody>
+    </table>
+
+    <button onclick="calcularTotal()">Calcular Total dos Produtos</button>
+  </div>
+</div>
+
+<script>
+  // Função para calcular a porcentagem de desconto
+  function calcularPorcentagem() {
+    const preco = parseFloat(document.getElementById('preco').value);
+    const porcentagem = parseFloat(document.getElementById('porcentagem').value);
+
+    if (isNaN(preco) || isNaN(porcentagem)) {
+      alert("Por favor, insira valores válidos.");
+      return;
+    }
+
+    const desconto = preco * (porcentagem / 100);
+    const precoFinal = preco - desconto;
+
+    document.getElementById('resultadoPorcentagem').textContent = `Preço final com desconto: R$ ${precoFinal.toFixed(2)}`;
+  }
+
+  // Função para adicionar produtos à tabela
+  function adicionarProduto() {
+    const nomeProduto = document.getElementById('nomeProduto').value;
+    const precoProduto = parseFloat(document.getElementById('precoProduto').value);
+
+    if (!nomeProduto || isNaN(precoProduto)) {
+      alert("Por favor, insira um nome de produto e um preço válidos.");
+      return;
+    }
+
+    // Criar nova linha na tabela
+    const tabela = document.getElementById('tabelaProdutos').getElementsByTagName('tbody')[0];
+    const novaLinha = tabela.insertRow();
+
+    const celulaNome = novaLinha.insertCell(0);
+    const celulaPreco = novaLinha.insertCell(1);
+
+    celulaNome.textContent = nomeProduto;
+    celulaPreco.textContent = `R$ ${precoProduto.toFixed(2)}`;
+
+    // Limpar os campos
+    document.getElementById('nomeProduto').value = '';
+    document.getElementById('precoProduto').value = '';
+  }
+
+  // Função para calcular o total de todos os produtos
+  function calcularTotal() {
+    const tabela = document.getElementById('tabelaProdutos').getElementsByTagName('tbody')[0];
+    const linhas = tabela.getElementsByTagName('tr');
+    let total = 0;
+
+    // Somar os preços de todos os produtos
+    for (let i = 0; i < linhas.length; i++) {
+      const preco = parseFloat(linhas[i].getElementsByTagName('td')[1].textContent.replace('R$', ''));
+      total += preco;
+    }
+
+    alert(`O preço total dos produtos é: R$ ${total.toFixed(2)}`);
+  }
+</script>
+
+</body>
+</html>
